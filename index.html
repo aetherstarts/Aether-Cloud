@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether Cloud - Premium Hosting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #1a103d, #0f0a1e);
+            min-height: 100vh;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+        }
+        .drop-zone {
+            border: 2px dashed rgba(139, 92, 246, 0.5);
+            transition: all 0.3s ease;
+        }
+        .drop-zone:hover {
+            border-color: #a78bfa;
+            background: rgba(139, 92, 246, 0.05);
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(139, 92, 246, 0.2);
+            border-top: 5px solid #a78bfa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden-node { display: none !important; }
+    </style>
+</head>
+<body class="p-6">
+
+    <nav class="w-full max-w-4xl flex justify-between items-center mb-12">
+        <div class="text-2xl font-bold tracking-tighter flex items-center gap-2">
+            <div class="w-8 h-8 bg-violet-500 rounded-lg flex items-center justify-center">
+                <i class="fas fa-cloud-upload-alt text-sm"></i>
+            </div>
+            Aether<span class="text-violet-400">Cloud</span>
+        </div>
+        <div class="flex gap-6 text-sm font-medium text-gray-400">
+            <a href="login.html" class="hover:text-violet-400">SignUp</a>
+            <a href="register.html" class="text-white bg-white/10 px-4 py-1.5 rounded-full">Register</a>
+        </div>
+    </nav>
+
+    <main class="w-full max-w-2xl glass-card p-8 md:p-12 shadow-2xl min-h-[400px] flex flex-col justify-center">
+        
+        <div id="view-upload">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2">Upload Files & Images</h1>
+                <p class="text-gray-400 text-sm">Uploads up to 200 MB are allowed.</p>
+            </div>
+
+            <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="drop-zone rounded-2xl p-12 flex flex-col items-center justify-center cursor-pointer mb-6 group">
+                <div class="w-16 h-16 bg-violet-500/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i class="fas fa-file-import text-violet-400 text-2xl"></i>
+                </div>
+                <p class="text-lg font-medium text-center">Select or drop files</p>
+                <p class="text-xs text-gray-500 mt-2 text-center">Images, Videos, or Documents</p>
+                <input type="file" id="fileInput" class="hidden" onchange="startProcess(this)">
+            </div>
+
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-[1px] bg-gray-800 flex-1"></div>
+                <span class="text-xs text-gray-500 font-bold tracking-widest uppercase">Or URL</span>
+                <div class="h-[1px] bg-gray-800 flex-1"></div>
+            </div>
+
+            <div class="relative group">
+                <input type="text" id="urlInput" placeholder="Upload via URL" 
+                    class="w-full bg-black/20 border border-gray-700 rounded-xl py-4 px-5 focus:outline-none focus:border-violet-500 transition text-sm">
+                <button onclick="startProcess({files:[], type:'url'})" class="absolute right-2 top-2 bottom-2 px-6 btn-purple rounded-lg text-xs font-bold uppercase">
+                    Fetch
+                </button>
+            </div>
+        </div>
+
+        <div id="view-loading" class="hidden-node flex flex-col items-center text-center">
+            <div class="spinner mb-6"></div>
+            <h2 id="loading-title" class="text-2xl font-bold tracking-tight">Upload Photo...</h2>
+            <p class="text-gray-500 text-sm mt-2">Proses Upload Files To Server Aether Cloud</p>
+        </div>
+
+        <div id="view-success" class="hidden-node flex flex-col items-center text-center">
+            <div class="w-20 h-20 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-6 text-3xl">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="success-title" class="text-3xl font-bold mb-8">Success Upload</h2>
+            
+            <div class="w-full bg-black/40 border border-white/10 rounded-2xl p-1.5 flex items-center mb-8">
+                <input type="text" id="finalLink" readonly value="" 
+                    class="bg-transparent border-none w-full px-4 text-sm text-violet-300 outline-none font-medium">
+                <button onclick="copyLink(this)" class="bg-violet-600 hover:bg-violet-500 w-12 h-12 rounded-xl flex items-center justify-center transition">
+                    <i class="fas fa-clipboard"></i>
+                </button>
+            </div>
+
+            <button onclick="window.location.reload()" class="w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition font-bold text-gray-400 uppercase tracking-widest text-xs">
+                <i class="fas fa-arrow-left mr-2"></i> Back To Upload
+            </button>
+        </div>
+
+        <div id="view-error" class="hidden-node flex flex-col items-center text-center">
+            <div class="w-20 h-20 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center mb-6 text-3xl">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2 id="error-title" class="text-2xl font-bold mb-4 text-white uppercase">Error Upload</h2>
+            <p id="error-message" class="text-gray-400 mb-8 px-4 font-light"></p>
+
+            <button onclick="window.location.reload()" class="w-full py-4 rounded-xl btn-purple transition font-bold text-white uppercase tracking-widest text-xs">
+                Back
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="mt-12 text-gray-600 text-[11px] font-bold tracking-[0.2em] uppercase">
+        &copy; 2026 Aether Cloud Service • Reserved
+    </footer>
+
+    <script>
+async function startProcess(input) {
+    let file;
+    if (input.files && input.files[0]) {
+        file = input.files[0];
+    } else {
+        return; // Tambah logik fetch URL jika perlu
+    }
+
+    const MAX_SIZE = 200 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+        showError(file);
+        return;
+    }
+
+    // Tunjukkan paparan loading
+    switchView('view-loading');
+    document.getElementById('loading-title').innerText = `Uploading ${file.name}...`;
+
+    try {
+        // Hantar fail ke backend /api/upload
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: file,
+            headers: {
+                'x-filename': `${Math.random().toString(36).substring(2, 10)}.${file.name.split('.').pop()}`
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Paparan Berjaya
+            switchView('view-success');
+            document.getElementById('success-title').innerText = `Success Upload`;
+            // Link kini merujuk kepada fail sebenar yang disimpan
+            document.getElementById('finalLink').value = result.url; 
+        } else {
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        alert("Upload failed: " + error.message);
+        window.location.reload();
+    }
+}
+
+        function showError(file) {
+            let label = "File";
+            if (file.type.includes('image')) label = "Foto";
+            else if (file.type.includes('video')) label = "Video";
+
+            switchView('view-error');
+            document.getElementById('error-title').innerText = `Gagal Upload ${label}`;
+            document.getElementById('error-message').innerText = `Ukuran Melebihi 200MB`;
+        }
+
+        function switchView(id) {
+            ['view-upload', 'view-loading', 'view-success', 'view-error'].forEach(view => {
+                document.getElementById(view).classList.add('hidden-node');
+            });
+            document.getElementById(id).classList.remove('hidden-node');
+        }
+
+        function copyLink(btn) {
+            const input = document.getElementById('finalLink');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            const icon = btn.querySelector('i');
+            icon.className = 'fas fa-check text-green-400';
+            setTimeout(() => { icon.className = 'fas fa-clipboard text-white'; }, 2000);
+        }
+
+        const dz = document.getElementById('dropZone');
+        dz.ondragover = (e) => { e.preventDefault(); dz.style.borderColor = "#a78bfa"; };
+        dz.ondragleave = () => { dz.style.borderColor = "rgba(139, 92, 246, 0.5)"; };
+        dz.ondrop = (e) => {
+            e.preventDefault();
+            if(e.dataTransfer.files.length > 0) startProcess({files: e.dataTransfer.files});
+        };
+    </script>
+</body>
+</html>

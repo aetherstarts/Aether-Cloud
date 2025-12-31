@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Aether Cloud</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #1a103d, #0f0a1e);
+            min-height: 100vh;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+        }
+        .input-field {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #a78bfa;
+            outline: none;
+            box-shadow: 0 0 15px rgba(167, 139, 250, 0.2);
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+        .g-recaptcha {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <nav class="w-full max-w-md flex justify-start mb-6">
+        <a href="index.html" class="flex items-center gap-2 text-gray-400 hover:text-white transition group font-medium text-sm">
+            <div class="w-8 h-8 bg-white/5 rounded-full flex items-center justify-center group-hover:bg-violet-500/20 transition">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            Home
+        </a>
+    </nav>
+
+    <main class="w-full max-w-lg glass-card p-8 md:p-10 shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold tracking-tight mb-2">Register</h1>
+            <div class="bg-violet-500/10 border border-violet-500/20 rounded-xl p-4 inline-block">
+                <p class="text-violet-300 text-xs font-medium">
+                    Registering allows you to keep track of the files you upload and albums you create!
+                </p>
+            </div>
+        </div>
+
+        <form action="#" method="POST" class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Username:</label>
+                <input type="text" placeholder="Choose a unique username" required
+                    class="input-field w-full py-4 px-5 rounded-2xl text-sm">
+                <p class="text-[10px] text-gray-500 italic ml-1">*Cannot be the same as your email.</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">E-Mail:</label>
+                <input type="email" placeholder="yourname@example.com" required
+                    class="input-field w-full py-4 px-5 rounded-2xl text-sm">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Password:</label>
+                <input type="password" placeholder="••••••••" required
+                    class="input-field w-full py-4 px-5 rounded-2xl text-sm">
+            </div>
+
+            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+
+            <p class="text-[10px] text-gray-500 text-center leading-relaxed">
+                By registering, you agree to receive account related emails, including password recovery, account updates, multi-factor authentication, and others as outlined in our <a href="#" class="text-violet-400 hover:underline">Terms of Service</a>.
+            </p>
+
+            <button type="submit" class="btn-purple w-full py-4 rounded-2xl font-bold text-sm uppercase tracking-[0.2em] transition-all active:scale-95">
+                Register
+            </button>
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-white/5 text-center">
+            <p class="text-xs text-gray-400">Already have an account? 
+                <a href="login.html" class="text-violet-400 font-bold hover:underline">SignUp</a>
+            </p>
+        </div>
+    </main>
+
+    <footer class="mt-10 text-gray-700 text-[10px] font-black tracking-[0.3em] uppercase">
+        &copy; 2026 Aether Cloud • User Panel
+    </footer>
+
+</body>
+</html>
